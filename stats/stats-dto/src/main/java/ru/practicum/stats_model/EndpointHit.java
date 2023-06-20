@@ -1,12 +1,12 @@
-package ru.practicum.stats_common.model;
+package ru.practicum.stats_model;
 
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 @Builder
 public class EndpointHit {
     @NotBlank

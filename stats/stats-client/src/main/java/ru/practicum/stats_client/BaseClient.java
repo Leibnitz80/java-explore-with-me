@@ -1,17 +1,19 @@
 package ru.practicum.stats_client;
 
+import org.springframework.web.client.RestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.lang.Nullable;
 import org.springframework.web.client.HttpStatusCodeException;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.http.MediaType;
 
 import java.util.List;
 import java.util.Map;
 
+@Validated
 public class BaseClient {
     private final RestTemplate restTemplate;
 
@@ -40,7 +42,7 @@ public class BaseClient {
         } catch (HttpStatusCodeException e) {
             return ResponseEntity.status(e.getStatusCode()).body(e.getResponseBodyAsByteArray());
         }
-        return prepareGatewayResponse(statsServerResponse);
+        return prepareAdapterResponse(statsServerResponse);
     }
 
     private HttpHeaders defaultHeaders() {
@@ -50,7 +52,7 @@ public class BaseClient {
         return headers;
     }
 
-    private static ResponseEntity<Object> prepareGatewayResponse(ResponseEntity<Object> response) {
+    private static ResponseEntity<Object> prepareAdapterResponse(ResponseEntity<Object> response) {
         if (response.getStatusCode().is2xxSuccessful()) {
             return response;
         }

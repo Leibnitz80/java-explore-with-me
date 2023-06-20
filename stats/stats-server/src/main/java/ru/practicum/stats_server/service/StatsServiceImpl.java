@@ -2,9 +2,8 @@ package ru.practicum.stats_server.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.stats_common.model.EndpointHit;
-import ru.practicum.stats_common.model.ViewStats;
+import ru.practicum.stats_model.EndpointHit;
+import ru.practicum.stats_model.ViewStats;
 import ru.practicum.stats_server.mapper.StatsMapper;
 import ru.practicum.stats_server.repository.StatsRepository;
 
@@ -14,28 +13,27 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class StatsServiceImpl implements StatsService {
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
     private final StatsRepository statsRepository;
 
     @Override
-    @Transactional
     public void addHit(EndpointHit endpointHit) {
         statsRepository.save(StatsMapper.endpointToStats(endpointHit,
-                LocalDateTime.parse(endpointHit.getTimestamp(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))));
+                LocalDateTime.parse(endpointHit.getTimestamp(), DATE_TIME_FORMATTER)));
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public List<ViewStats> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
+    public List<ViewStats> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean isUnique) {
         if (uris == null || uris.isEmpty()) {
-            if (unique) {
+            if (isUnique) {
                 return statsRepository.getAllStatsDistinctIp(start, end);
             } else {
                 return statsRepository.getAllStats(start, end);
             }
         } else {
-            if (unique) {
+            if (isUnique) {
                 return statsRepository.getStatsByUrisDistinctIp(start, end, uris);
             } else {
                 return statsRepository.getStatsByUris(start, end, uris);

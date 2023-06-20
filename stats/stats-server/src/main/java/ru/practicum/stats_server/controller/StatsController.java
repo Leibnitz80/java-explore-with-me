@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.practicum.stats_common.model.EndpointHit;
-import ru.practicum.stats_common.model.ViewStats;
 import ru.practicum.stats_server.service.StatsService;
+import ru.practicum.stats_model.EndpointHit;
+import ru.practicum.stats_model.ViewStats;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
