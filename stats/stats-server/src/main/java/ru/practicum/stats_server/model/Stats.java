@@ -16,21 +16,20 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class Stats {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
     @Column(name = "app_name", nullable = false)
-    String app;
+    private String app;
 
     @Column(nullable = false)
-    String uri;
+    private String uri;
 
     @Column(name = "user_ip", nullable = false, length = 15)
-    String ip;
+    private String ip;
 
     @Column(name = "created", nullable = false)
-    LocalDateTime timestamp;
+    private LocalDateTime timestamp;
 }

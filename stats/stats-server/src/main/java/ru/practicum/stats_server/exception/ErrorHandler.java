@@ -22,18 +22,17 @@ public class ErrorHandler {
             ClassCastException.class
     })
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleBadRequest(final Throwable exception) {
+    public ErrorResponse handleBadRequest(final RuntimeException exception) {
         log.error(exception.toString());
         return new ErrorResponse(exception.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponse runtimeException(final RuntimeException e) {
+    public ErrorResponse internalException(final Throwable e) {
         log.error(e.getMessage());
         return new ErrorResponse(
                 String.format(e.getMessage())
         );
     }
-
 }

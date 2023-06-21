@@ -3,11 +3,10 @@ package ru.practicum.stats_model;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
 @Builder
+@Data
 public class EndpointHit {
     @NotBlank
     private String app;
@@ -19,5 +18,5 @@ public class EndpointHit {
     private String ip;
 
     @NotBlank
-    private String timestamp;
+    private LocalDateTime timestamp;
 }

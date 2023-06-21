@@ -1,6 +1,7 @@
 package ru.practicum.stats_server.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -21,20 +22,24 @@ import java.util.List;
 @Validated
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class StatsController {
+    private static final String DATE_TIME_FORMATTER = "yyyy-MM-dd HH:mm:ss";
     private final StatsService statsService;
 
     @PostMapping("/hit")
     @ResponseStatus(HttpStatus.CREATED)
     public void addHit(@Valid @RequestBody EndpointHit endpointHit) {
+        log.info("POST addHit uri:{}, ip:{}", endpointHit.getUri(), endpointHit.getIp());
         statsService.addHit(endpointHit);
     }
 
     @GetMapping("/stats")
-    public List<ViewStats> getStats(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime start,
-                                    @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime end,
+    public List<ViewStats> getStats(@RequestParam @DateTimeFormat(pattern = DATE_TIME_FORMATTER) LocalDateTime start,
+                                    @RequestParam @DateTimeFormat(pattern = DATE_TIME_FORMATTER) LocalDateTime end,
                                     @RequestParam(required = false) List<String> uris,
-                                    @RequestParam(required = false, defaultValue = "false") Boolean unique) {
+                                    @RequestParam(defaultValue = "false") Boolean unique) {
+        log.info("GET getStats start:{}, end:{}", start, end);
         if (start.isAfter(end)) {
             throw new IllegalArgumentException("Wrong date interval!");
         }

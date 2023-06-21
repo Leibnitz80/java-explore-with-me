@@ -8,20 +8,17 @@ import ru.practicum.stats_server.mapper.StatsMapper;
 import ru.practicum.stats_server.repository.StatsRepository;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class StatsServiceImpl implements StatsService {
-    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
     private final StatsRepository statsRepository;
 
     @Override
     public void addHit(EndpointHit endpointHit) {
         statsRepository.save(StatsMapper.endpointToStats(endpointHit,
-                LocalDateTime.parse(endpointHit.getTimestamp(), DATE_TIME_FORMATTER)));
+                endpointHit.getTimestamp()));
     }
 
     @Override
