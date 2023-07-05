@@ -3,7 +3,6 @@ package ru.practicum.main_service.category.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,14 +21,13 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @RequestMapping("/admin/categories")
 @Slf4j
-@Validated
-public class CategoryAdmController {
+public class CategoryAdminController {
     private final CategoryService categoryService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CategoryDto create(@Valid @RequestBody NewCategoryDto newCategoryDto) {
-        log.info("CategoryAdmController create");
+        log.info("CategoryAdminController create");
         return categoryService.create(newCategoryDto);
     }
 
@@ -37,14 +35,14 @@ public class CategoryAdmController {
     @ResponseStatus(HttpStatus.OK)
     public CategoryDto patch(@PathVariable Long catId,
                              @Valid @RequestBody CategoryDto categoryDto) {
-        log.info("CategoryAdmController patch catId={}", catId);
+        log.info("CategoryAdminController patch catId={}", catId);
         return categoryService.patch(catId, categoryDto);
     }
 
     @DeleteMapping("/{catId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteById(@PathVariable Long catId) {
-        log.info("CategoryAdmController deleteById catId={}", catId);
+        log.info("CategoryAdminController deleteById catId={}", catId);
         categoryService.deleteById(catId);
     }
 }

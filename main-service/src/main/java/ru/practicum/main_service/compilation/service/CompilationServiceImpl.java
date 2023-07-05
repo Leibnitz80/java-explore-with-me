@@ -1,7 +1,6 @@
 package ru.practicum.main_service.compilation.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.main_service.compilation.dto.CompilationDto;
@@ -14,6 +13,7 @@ import ru.practicum.main_service.event.dto.EventShortDto;
 import ru.practicum.main_service.event.model.Event;
 import ru.practicum.main_service.event.service.EventService;
 import ru.practicum.main_service.exception.NotFoundException;
+import ru.practicum.main_service.utilities.PageRequestExt;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -71,13 +71,13 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
      @Override
-    public List<CompilationDto> getAll(Boolean pinned, Pageable pageable) {
+    public List<CompilationDto> getAll(Boolean pinned, Integer from, Integer size) {
         List<Compilation> compilations;
 
         if (pinned == null) {
-            compilations = compilationRepository.findAll(pageable).toList();
+            compilations = compilationRepository.findAll(PageRequestExt.of(from, size)).toList();
         } else {
-            compilations = compilationRepository.findAllByPinned(pinned, pageable);
+            compilations = compilationRepository.findAllByPinned(pinned, PageRequestExt.of(from, size));
         }
 
         Set<Event> uniqueEvents = new HashSet<>();

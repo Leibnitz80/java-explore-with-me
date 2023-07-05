@@ -1,7 +1,6 @@
 package ru.practicum.main_service.category.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.main_service.category.dto.CategoryDto;
@@ -10,6 +9,7 @@ import ru.practicum.main_service.category.mapper.CategoryMapper;
 import ru.practicum.main_service.category.model.Category;
 import ru.practicum.main_service.category.repository.CategoryRepository;
 import ru.practicum.main_service.exception.NotFoundException;
+import ru.practicum.main_service.utilities.PageRequestExt;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,8 +27,8 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<CategoryDto> getAll(Pageable pageable) {
-        return categoryRepository.findAll(pageable).stream()
+    public List<CategoryDto> getAll(Integer from, Integer size) {
+        return categoryRepository.findAll(PageRequestExt.of(from, size)).stream()
                 .map(CategoryMapper::toCategoryDto)
                 .collect(Collectors.toList());
     }
@@ -61,7 +61,6 @@ public class CategoryServiceImpl implements CategoryService {
     public void deleteById(Long catId) {
         categoryRepository.findById(catId)
                 .orElseThrow(() -> new NotFoundException("No category with such id " + catId));
-
         categoryRepository.deleteById(catId);
     }
 }

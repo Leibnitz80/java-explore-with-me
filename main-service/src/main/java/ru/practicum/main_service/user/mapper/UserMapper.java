@@ -8,18 +8,18 @@ import ru.practicum.main_service.user.model.User;
 
 @UtilityClass
 public class UserMapper {
-    public static User toUser(NewUserRequest newUserRequest) {
+    public User toUser(NewUserRequest newUserRequest) {
         User result = new User();
         result.setName(newUserRequest.getName());
         result.setEmail(newUserRequest.getEmail());
         return result;
     }
 
-    public static UserDto toUserDto(User user) {
+    public UserDto toUserDto(User user) {
         return new UserDto(user.getEmail(), user.getId(), user.getName());
     }
 
-    public static UserShortDto toUserShortDto(User user) {
+    public UserShortDto toUserShortDto(User user) {
         return new UserShortDto(user.getId(), user.getName());
     }
 }

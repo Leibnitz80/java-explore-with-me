@@ -2,14 +2,11 @@ package ru.practicum.main_service.category.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.main_service.category.dto.CategoryDto;
 import ru.practicum.main_service.category.service.CategoryService;
@@ -23,22 +20,20 @@ import java.util.List;
 @RequestMapping("/categories")
 @Slf4j
 @Validated
-public class CategoryPubController {
+public class CategoryPublicController {
     private final CategoryService categoryService;
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
     public List<CategoryDto> getAll(
             @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
             @RequestParam(defaultValue = "10") @Positive Integer size) {
-        log.info("CategoryPubController getAll");
-        return categoryService.getAll(PageRequest.of(from / size, size));
+        log.info("CategoryPublicController getAll");
+        return categoryService.getAll(from, size);
     }
 
     @GetMapping("/{catId}")
-    @ResponseStatus(HttpStatus.OK)
     public CategoryDto getById(@PathVariable Long catId) {
-        log.info("CategoryPubController getById catId={}", catId);
+        log.info("CategoryPublicController getById catId={}", catId);
         return categoryService.getById(catId);
     }
 }

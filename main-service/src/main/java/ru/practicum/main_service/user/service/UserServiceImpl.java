@@ -1,7 +1,6 @@
 package ru.practicum.main_service.user.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.main_service.user.dto.NewUserRequest;
@@ -10,6 +9,7 @@ import ru.practicum.main_service.exception.NotFoundException;
 import ru.practicum.main_service.user.mapper.UserMapper;
 import ru.practicum.main_service.user.model.User;
 import ru.practicum.main_service.user.repository.UserRepository;
+import ru.practicum.main_service.utilities.PageRequestExt;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,13 +27,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> getUsers(List<Long> ids, Pageable pageable) {
+    public List<UserDto> getUsers(List<Long> ids, Integer from, Integer size) {
         if (ids == null || ids.isEmpty()) {
-            return userRepository.findAll(pageable).stream()
+            return userRepository.findAll(PageRequestExt.of(from, size)).stream()
                     .map(UserMapper::toUserDto)
                     .collect(Collectors.toList());
         } else {
-            return userRepository.findAllByIdIn(ids, pageable).stream()
+            return userRepository.findAllByIdIn(ids, PageRequestExt.of(from, size)).stream()
                     .map(UserMapper::toUserDto)
                     .collect(Collectors.toList());
         }

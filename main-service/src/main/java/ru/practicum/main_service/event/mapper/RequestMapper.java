@@ -6,7 +6,7 @@ import ru.practicum.main_service.event.model.Request;
 
 @UtilityClass
 public class RequestMapper {
-    public static ParticipationRequestDto toParticipationRequestDto(Request request) {
+    public ParticipationRequestDto toParticipationRequestDto(Request request) {
         ParticipationRequestDto result = new ParticipationRequestDto();
         result.setId(request.getId());
         result.setEvent(request.getEvent().getId());

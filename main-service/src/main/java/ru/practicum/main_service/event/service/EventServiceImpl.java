@@ -1,7 +1,6 @@
 package ru.practicum.main_service.event.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.main_service.category.model.Category;
@@ -16,6 +15,7 @@ import ru.practicum.main_service.event.repository.LocationRepository;
 import ru.practicum.main_service.exception.*;
 import ru.practicum.main_service.user.model.User;
 import ru.practicum.main_service.user.service.*;
+import ru.practicum.main_service.utilities.PageRequestExt;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
@@ -26,11 +26,14 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class EventServiceImpl implements EventService {
+    private static final Comparator<EventShortDto> EVENT_SHORT_DTO_COMPARATOR_VIEW = Comparator.comparing(EventShortDto::getViews);
+    private static final Comparator<EventShortDto> EVENT_SHORT_DTO_COMPARATOR_EVENTDATE = Comparator.comparing(EventShortDto::getEventDate);
     private final UserService userService;
     private final CategoryService categoryService;
     private final StatsService statsService;
     private final LocationRepository locationRepository;
     private final EventRepository eventRepository;
+
 
     @Override
     public List<EventFullDto> getEventsByAdmin(List<Long> users, List<EventState> states, List<Long> categories,
@@ -109,10 +112,10 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventShortDto> getAllEventsByPrivate(Long userId, Pageable pageable) {
+    public List<EventShortDto> getAllEventsByPrivate(Long userId, Integer from, Integer size) {
         userService.getUserById(userId);
 
-        List<Event> events = eventRepository.findAllByInitiatorId(userId, pageable);
+        List<Event> events = eventRepository.findAllByInitiatorId(userId, PageRequestExt.of(from, size));
 
         return toEventsShortDto(events);
     }
@@ -231,9 +234,9 @@ public class EventServiceImpl implements EventService {
         }
 
         if (needSort(sort, EventSortType.VIEWS)) {
-            eventsShortDto.sort(Comparator.comparing(EventShortDto::getViews));
+            eventsShortDto.sort(EVENT_SHORT_DTO_COMPARATOR_VIEW);
         } else if (needSort(sort, EventSortType.EVENT_DATE)) {
-            eventsShortDto.sort(Comparator.comparing(EventShortDto::getEventDate));
+            eventsShortDto.sort(EVENT_SHORT_DTO_COMPARATOR_EVENTDATE);
         }
 
         statsService.addHit(request);

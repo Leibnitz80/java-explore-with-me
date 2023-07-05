@@ -2,7 +2,6 @@ package ru.practicum.main_service.event.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,17 +38,15 @@ public class EventPrivateController {
     private final RequestService requestService;
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
     public List<EventShortDto> getAllEventsByPrivate(
             @PathVariable Long userId,
             @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
             @RequestParam(defaultValue = "10") @Positive Integer size) {
         log.info("EventPrivateController getAllEventsByPrivate userId={}", userId);
-        return eventService.getAllEventsByPrivate(userId, PageRequest.of(from / size, size));
+        return eventService.getAllEventsByPrivate(userId, from, size);
     }
 
     @GetMapping("/{eventId}")
-    @ResponseStatus(HttpStatus.OK)
     public EventFullDto getEventByPrivate(
             @PathVariable Long userId,
             @PathVariable Long eventId) {
@@ -58,7 +55,6 @@ public class EventPrivateController {
     }
 
     @GetMapping("/{eventId}/requests")
-    @ResponseStatus(HttpStatus.OK)
     public List<ParticipationRequestDto> getEventRequestsByEventOwner(
             @PathVariable Long userId,
             @PathVariable Long eventId) {
@@ -75,7 +71,6 @@ public class EventPrivateController {
     }
 
     @PatchMapping("/{eventId}")
-    @ResponseStatus(HttpStatus.OK)
     public EventFullDto patchEventByPrivate(
             @PathVariable Long userId,
             @PathVariable Long eventId,
@@ -85,7 +80,6 @@ public class EventPrivateController {
     }
 
     @PatchMapping("/{eventId}/requests")
-    @ResponseStatus(HttpStatus.OK)
     public EventRequestStatusUpdateResult patchEventRequestsByEventOwner(
             @PathVariable Long userId,
             @PathVariable Long eventId,

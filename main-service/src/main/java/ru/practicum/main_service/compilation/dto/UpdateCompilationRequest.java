@@ -19,6 +19,6 @@ import java.util.List;
 public class UpdateCompilationRequest {
     @Size(min = 1, max = 50)
     private String title;
-    Boolean pinned;
+    private Boolean pinned;
     private List<Long> events;
 }

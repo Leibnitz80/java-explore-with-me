@@ -12,30 +12,28 @@ import ru.practicum.main_service.event.enums.RequestStatusAction;
 import ru.practicum.main_service.event.mapper.RequestMapper;
 import ru.practicum.main_service.event.model.Event;
 import ru.practicum.main_service.event.model.Request;
+import ru.practicum.main_service.event.repository.EventRepository;
 import ru.practicum.main_service.event.repository.RequestRepository;
 import ru.practicum.main_service.exception.*;
 import ru.practicum.main_service.user.model.User;
-import ru.practicum.main_service.user.service.UserService;
+import ru.practicum.main_service.user.repository.UserRepository;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class RequestServiceImpl implements RequestService {
-    private final UserService userService;
-    private final EventService eventService;
+    private final UserRepository userRepository;
+    private final EventRepository eventRepository;
     private final StatsService statsService;
     private final RequestRepository requestRepository;
 
     @Override
     public List<ParticipationRequestDto> getEventRequestsByRequester(Long userId) {
-        userService.getUserById(userId);
+        userRepository.findById(userId);
 
         return toParticipationRequestsDto(requestRepository.findAllByRequesterId(userId));
     }
@@ -43,8 +41,8 @@ public class RequestServiceImpl implements RequestService {
     @Override
     @Transactional
     public ParticipationRequestDto createEventRequest(Long userId, Long eventId) {
-        User user = userService.getUserById(userId);
-        Event event = eventService.getEventById(eventId);
+        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("No such user, id = " + userId));
+        Event event = eventRepository.findById(eventId).orElseThrow(() -> new NotFoundException("No event with id = " + userId));
 
         if (Objects.equals(event.getInitiator().getId(), userId)) {
             throw new ForbiddenException("Request for owner event");
@@ -83,7 +81,7 @@ public class RequestServiceImpl implements RequestService {
     @Override
     @Transactional
     public ParticipationRequestDto cancelEventRequest(Long userId, Long requestId) {
-        userService.getUserById(userId);
+        userRepository.findById(userId).orElseThrow(() -> new NotFoundException("No such user id " + userId));
 
         Request request = requestRepository.findById(requestId)
                 .orElseThrow(() -> new NotFoundException("No request with id " + requestId));
@@ -97,8 +95,8 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public List<ParticipationRequestDto> getEventRequestsByEventOwner(Long userId, Long eventId) {
-        userService.getUserById(userId);
-        Event event = eventService.getEventById(eventId);
+        userRepository.findById(userId).orElseThrow(() -> new NotFoundException("No such user id " + userId));
+        Event event = eventRepository.findById(eventId).orElseThrow(() -> new NotFoundException("No event with id = " + userId));
 
         checkUserIsOwner(event.getInitiator().getId(), userId);
 
@@ -109,8 +107,8 @@ public class RequestServiceImpl implements RequestService {
     @Transactional
     public EventRequestStatusUpdateResult patchEventRequestsByEventOwner(
             Long userId, Long eventId, EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest) {
-        userService.getUserById(userId);
-        Event event = eventService.getEventById(eventId);
+        userRepository.findById(userId).orElseThrow(() -> new NotFoundException("No such user id " + userId));
+        Event event = eventRepository.findById(eventId).orElseThrow(() -> new NotFoundException("No event with id = " + userId));
 
         checkUserIsOwner(event.getInitiator().getId(), userId);
 

@@ -24,7 +24,6 @@ public class RequestPrivateController {
     private final RequestService requestService;
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
     public List<ParticipationRequestDto> getEventRequestsByRequester(@PathVariable Long userId) {
         log.info("RequestPrivateController getEventRequestsByRequester userId={}", userId);
         return requestService.getEventRequestsByRequester(userId);
@@ -39,7 +38,6 @@ public class RequestPrivateController {
     }
 
     @PatchMapping("/{requestId}/cancel")
-    @ResponseStatus(HttpStatus.OK)
     public ParticipationRequestDto cancelEventRequest(@PathVariable Long userId,
                                                       @PathVariable Long requestId) {
         log.info("RequestPrivateController cancelEventRequest userId={}, requestId={}", userId, requestId);

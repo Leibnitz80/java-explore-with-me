@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.validation.annotation.Validated;
 import ru.practicum.main_service.compilation.dto.CompilationDto;
 import ru.practicum.main_service.compilation.dto.NewCompilationDto;
 import ru.practicum.main_service.compilation.dto.UpdateCompilationRequest;
@@ -23,29 +22,27 @@ import javax.validation.Valid;
 @RequestMapping("/admin/compilations")
 @RequiredArgsConstructor
 @Slf4j
-@Validated
-public class CompilationAdmController {
+public class CompilationAdminController {
     private final CompilationService compilationService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CompilationDto create(@Valid @RequestBody NewCompilationDto newCompilationDto) {
-        log.info("POST CompilationAdmController create");
+        log.info("POST CompilationAdminController create");
         return compilationService.create(newCompilationDto);
     }
 
     @PatchMapping("/{compId}")
-    @ResponseStatus(HttpStatus.OK)
     public CompilationDto patch(@PathVariable Long compId,
                                 @Valid @RequestBody UpdateCompilationRequest updateCompilationRequest) {
-        log.info("PATCH CompilationAdmController patch compId={}", compId);
+        log.info("PATCH CompilationAdminController patch compId={}", compId);
         return compilationService.patch(compId, updateCompilationRequest);
     }
 
     @DeleteMapping("/{compId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteById(@PathVariable Long compId) {
-        log.info("DELETE CompilationAdmController deleteById compId={}", compId);
+        log.info("DELETE CompilationAdminController deleteById compId={}", compId);
         compilationService.deleteById(compId);
     }
 }

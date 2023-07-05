@@ -1,6 +1,5 @@
 package ru.practicum.main_service.event.service;
 
-import org.springframework.data.domain.Pageable;
 import ru.practicum.main_service.event.dto.EventFullDto;
 import ru.practicum.main_service.event.dto.EventShortDto;
 import ru.practicum.main_service.event.dto.NewEventDto;
@@ -20,7 +19,7 @@ public interface EventService {
 
     EventFullDto patchEventByAdmin(Long eventId, UpdateEventAdminRequest updateEventAdminRequest);
 
-    List<EventShortDto> getAllEventsByPrivate(Long userId, Pageable pageable);
+    List<EventShortDto> getAllEventsByPrivate(Long userId, Integer from, Integer size);
 
     EventFullDto createEventByPrivate(Long userId, NewEventDto newEventDto);
 

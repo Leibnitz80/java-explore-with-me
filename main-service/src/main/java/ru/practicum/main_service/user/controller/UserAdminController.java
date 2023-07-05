@@ -2,7 +2,6 @@ package ru.practicum.main_service.user.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,30 +27,29 @@ import java.util.List;
 @RequestMapping("/admin/users")
 @Slf4j
 @Validated
-public class UserAdmController {
+public class UserAdminController {
     private final UserService userService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserDto create(@Valid @RequestBody NewUserRequest newUserRequest) {
-        log.info("POST UserAdmController create");
+        log.info("POST UserAdminController create");
         return userService.create(newUserRequest);
     }
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
     public List<UserDto> getUsers(
             @RequestParam(required = false) List<Long> ids,
             @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
             @RequestParam(defaultValue = "10") @Positive Integer size) {
-        log.info("GET UserAdmController getUsers");
-        return userService.getUsers(ids, PageRequest.of(from / size, size));
+        log.info("GET UserAdminController getUsers");
+        return userService.getUsers(ids, from, size);
     }
 
     @DeleteMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteById(@PathVariable Long userId) {
-        log.info("DELETE UserAdmController deleteById userId={}", userId);
+        log.info("DELETE UserAdminController deleteById userId={}", userId);
         userService.deleteById(userId);
     }
 }
