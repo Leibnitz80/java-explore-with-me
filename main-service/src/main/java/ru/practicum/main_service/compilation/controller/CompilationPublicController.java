@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.validation.annotation.Validated;
 import ru.practicum.main_service.compilation.dto.CompilationDto;
 import ru.practicum.main_service.compilation.service.CompilationService;
+import ru.practicum.main_service.utilities.Constants;
 
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Positive;
@@ -26,8 +27,8 @@ public class CompilationPublicController {
     @GetMapping
     public List<CompilationDto> getAll(
             @RequestParam(required = false) Boolean pinned,
-            @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
-            @RequestParam(defaultValue = "10") @Positive Integer size) {
+            @RequestParam(defaultValue = Constants.DEFAULT_FROM) @PositiveOrZero Integer from,
+            @RequestParam(defaultValue = Constants.DEFAULT_SIZE) @Positive Integer size) {
         log.info("CompilationPublicController getAll");
         return compilationService.getAll(pinned, from, size);
     }

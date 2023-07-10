@@ -22,6 +22,7 @@ import ru.practicum.main_service.event.dto.ParticipationRequestDto;
 import ru.practicum.main_service.event.dto.UpdateEventUserRequest;
 import ru.practicum.main_service.event.service.EventService;
 import ru.practicum.main_service.event.service.RequestService;
+import ru.practicum.main_service.utilities.Constants;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -40,8 +41,8 @@ public class EventPrivateController {
     @GetMapping
     public List<EventShortDto> getAllEventsByPrivate(
             @PathVariable Long userId,
-            @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
-            @RequestParam(defaultValue = "10") @Positive Integer size) {
+            @RequestParam(defaultValue = Constants.DEFAULT_FROM) @PositiveOrZero Integer from,
+            @RequestParam(defaultValue = Constants.DEFAULT_SIZE) @Positive Integer size) {
         log.info("EventPrivateController getAllEventsByPrivate userId={}", userId);
         return eventService.getAllEventsByPrivate(userId, from, size);
     }

@@ -8,13 +8,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.main_service.event.model.Event;
 import ru.practicum.main_service.event.repository.RequestRepository;
+import ru.practicum.main_service.utilities.Constants;
 import ru.practicum.stats_client.StatsClient;
 import ru.practicum.stats_model.ViewStats;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +27,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class StatsServiceImpl implements StatsService {
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private final StatsClient statsClient;
     private final RequestRepository requestRepository;
     private final ObjectMapper mapper = new ObjectMapper();
@@ -38,7 +37,7 @@ public class StatsServiceImpl implements StatsService {
     @Override
     public void addHit(HttpServletRequest request) {
         statsClient.addHit(appName, request.getRequestURI(), request.getRemoteAddr(),
-                LocalDateTime.parse(LocalDateTime.now().format(formatter), formatter));
+                LocalDateTime.parse(LocalDateTime.now().format(Constants.DATE_TIME_FORMATTER), Constants.DATE_TIME_FORMATTER));
     }
 
     @Override
