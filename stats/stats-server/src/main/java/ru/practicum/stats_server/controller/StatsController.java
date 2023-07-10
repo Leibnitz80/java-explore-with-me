@@ -35,11 +35,17 @@ public class StatsController {
     }
 
     @GetMapping("/stats")
-    public List<ViewStats> getStats(@RequestParam @DateTimeFormat(pattern = DATE_TIME_FORMATTER) LocalDateTime start,
-                                    @RequestParam @DateTimeFormat(pattern = DATE_TIME_FORMATTER) LocalDateTime end,
+    public List<ViewStats> getStats(@RequestParam(required = false) @DateTimeFormat(pattern = DATE_TIME_FORMATTER) LocalDateTime start,
+                                    @RequestParam(required = false) @DateTimeFormat(pattern = DATE_TIME_FORMATTER) LocalDateTime end,
                                     @RequestParam(required = false) List<String> uris,
                                     @RequestParam(defaultValue = "false") Boolean unique) {
         log.info("GET getStats start:{}, end:{}", start, end);
+        if (start == null) {
+            throw new IllegalArgumentException("Missing start parameter!");
+        }
+        if (end == null) {
+            throw new IllegalArgumentException("Missing end parameter!");
+        }
         if (start.isAfter(end)) {
             throw new IllegalArgumentException("Wrong date interval!");
         }
