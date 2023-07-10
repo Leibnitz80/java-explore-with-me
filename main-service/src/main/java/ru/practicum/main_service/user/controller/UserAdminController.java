@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.main_service.user.dto.NewUserRequest;
 import ru.practicum.main_service.user.dto.UserDto;
 import ru.practicum.main_service.user.service.UserService;
+import ru.practicum.main_service.utilities.Constants;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -40,8 +41,8 @@ public class UserAdminController {
     @GetMapping
     public List<UserDto> getUsers(
             @RequestParam(required = false) List<Long> ids,
-            @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
-            @RequestParam(defaultValue = "10") @Positive Integer size) {
+            @RequestParam(defaultValue = Constants.DEFAULT_FROM) @PositiveOrZero Integer from,
+            @RequestParam(defaultValue = Constants.DEFAULT_SIZE) @Positive Integer size) {
         log.info("GET UserAdminController getUsers");
         return userService.getUsers(ids, from, size);
     }

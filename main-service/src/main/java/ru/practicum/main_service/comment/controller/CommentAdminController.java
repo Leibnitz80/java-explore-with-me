@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.main_service.comment.dto.CommentDto;
 import ru.practicum.main_service.comment.service.CommentService;
+import ru.practicum.main_service.utilities.Constants;
 
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
@@ -28,8 +29,8 @@ public class CommentAdminController {
 
     @GetMapping
     public List<CommentDto> getCommentsByAdmin(
-            @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
-            @RequestParam(defaultValue = "10") @Positive Integer size) {
+            @RequestParam(defaultValue = Constants.DEFAULT_FROM) @PositiveOrZero Integer from,
+            @RequestParam(defaultValue = Constants.DEFAULT_SIZE) @Positive Integer size) {
         log.info("GET CommentAdminController getCommentsByAdmin");
         return commentService.getCommentsByAdmin(from, size);
     }

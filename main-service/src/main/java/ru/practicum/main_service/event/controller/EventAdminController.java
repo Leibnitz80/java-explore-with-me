@@ -14,7 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.main_service.event.dto.EventFullDto;
 import ru.practicum.main_service.event.dto.UpdateEventAdminRequest;
 import ru.practicum.main_service.event.enums.EventState;
-import ru.practicum.main_service.event.service.*;
+import ru.practicum.main_service.event.service.EventService;
+import ru.practicum.main_service.utilities.Constants;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -29,17 +30,16 @@ import java.util.List;
 @Validated
 public class EventAdminController {
     private final EventService eventService;
-    private final static String DATE_PATTERN = "yyyy-MM-dd HH:mm:ss";
 
     @GetMapping
     public List<EventFullDto> getEventsByAdmin(
             @RequestParam(required = false) List<Long> users,
             @RequestParam(required = false) List<EventState> states,
             @RequestParam(required = false) List<Long> categories,
-            @RequestParam(required = false) @DateTimeFormat(pattern = DATE_PATTERN) LocalDateTime rangeStart,
-            @RequestParam(required = false) @DateTimeFormat(pattern = DATE_PATTERN) LocalDateTime rangeEnd,
-            @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
-            @RequestParam(defaultValue = "10") @Positive Integer size) {
+            @RequestParam(required = false) @DateTimeFormat(pattern = Constants.DATE_PATTERN) LocalDateTime rangeStart,
+            @RequestParam(required = false) @DateTimeFormat(pattern = Constants.DATE_PATTERN) LocalDateTime rangeEnd,
+            @RequestParam(defaultValue = Constants.DEFAULT_FROM) @PositiveOrZero Integer from,
+            @RequestParam(defaultValue = Constants.DEFAULT_SIZE) @Positive Integer size) {
         log.info("EventAdminController getEventsByAdmin");
         return eventService.getEventsByAdmin(users, states, categories, rangeStart, rangeEnd, from, size);
     }

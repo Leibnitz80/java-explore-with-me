@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.main_service.comment.dto.CommentDto;
 import ru.practicum.main_service.comment.service.CommentService;
+import ru.practicum.main_service.utilities.Constants;
 
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
@@ -26,8 +27,8 @@ public class CommentPublicController {
     @GetMapping
     public List<CommentDto> getCommentsByPublic(
             @RequestParam Long eventId,
-            @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
-            @RequestParam(defaultValue = "10") @Positive Integer size) {
+            @RequestParam(defaultValue = Constants.DEFAULT_FROM) @PositiveOrZero Integer from,
+            @RequestParam(defaultValue = Constants.DEFAULT_SIZE) @Positive Integer size) {
         log.info("GET CommentPublicController getCommentsByPublic eventId = {}", eventId);
         return commentService.getCommentsByPublic(eventId, from, size);
     }

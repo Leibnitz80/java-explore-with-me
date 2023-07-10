@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.main_service.comment.dto.NewCommentDto;
 import ru.practicum.main_service.comment.dto.CommentDto;
 import ru.practicum.main_service.comment.service.CommentService;
+import ru.practicum.main_service.utilities.Constants;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -35,8 +36,8 @@ public class CommentPrivateController {
     public List<CommentDto> getCommentsByPrivate(
             @PathVariable Long userId,
             @RequestParam(required = false) Long eventId,
-            @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
-            @RequestParam(defaultValue = "10") @Positive Integer size) {
+            @RequestParam(defaultValue = Constants.DEFAULT_FROM) @PositiveOrZero Integer from,
+            @RequestParam(defaultValue = Constants.DEFAULT_SIZE) @Positive Integer size) {
         log.info("GET CommentPrivateController getCommentsByPrivate userId = {}, eventId = {}", userId, eventId);
         return commentService.getCommentsByPrivate(userId, eventId, from, size);
     }
